@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'info.picocli:picocli:4.7.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+    //implementation 'org.hibernate.validator:hibernate-validator-cdi:8.0.0.Final'
+    implementation 'org.glassfish:jakarta.el:4.0.2'
+}
+
+group 'org.modrepo'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+mainClassName = 'org.modrepo.bagmatic.Bagmatic'
+
+jar {
+    manifest {
+        attributes('Main-Class': "${mainClassName}")
+    }
+}
+
+task uberJar(type: Jar) {
+    duplicatesStrategy = 'include'
+    manifest {
+        attributes 'Main-Class': "${mainClassName}"
+    }
+    archiveBaseName = "${rootProject.name}"
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

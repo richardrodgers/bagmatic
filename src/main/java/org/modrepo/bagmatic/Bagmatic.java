@@ -24,6 +24,8 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import org.modrepo.packr.BagBuilder;
+
 @Command(name = "bagmatic", mixinStandardHelpOptions = true, version = "1.0")
 public class Bagmatic implements Callable<Integer> {
 
@@ -69,6 +71,8 @@ public class Bagmatic implements Callable<Integer> {
         }
         //System.out.println("PC: " + session.getTypedConstraints("bag").iterator().next().getName());
         */
+        // test
+        var builder = new BagBuilder();
         return 0;
     }
 

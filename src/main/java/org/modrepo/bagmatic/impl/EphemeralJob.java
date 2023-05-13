@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Richard Rodgers
+ * Copyright 2023 Richard Rodgers
  * SPDX-Licence-Identifier: Apache-2.0
  */
 package org.modrepo.bagmatic.impl;
@@ -12,26 +12,26 @@ import org.modrepo.bagmatic.model.Assembler;
 import org.modrepo.bagmatic.model.Constraint;
 import org.modrepo.bagmatic.Delivery;
 import org.modrepo.bagmatic.model.Result;
-import org.modrepo.bagmatic.model.Session;
+import org.modrepo.bagmatic.model.Job;
 import org.modrepo.bagmatic.model.Template;
 /**
  * EphemeralSession is an in-memory session, where configuration state is not
  * persisted.
  */
-public class EphemeralSession implements Session {
+public class EphemeralJob implements Job {
 
     private HashMap<String, Constraint> constraints = new HashMap<>();
 
-    public EphemeralSession() {
+    public EphemeralJob() {
     }
 
-    public EphemeralSession(Set<Constraint> platformConstraints) {
+    public EphemeralJob(Set<Constraint> platformConstraints) {
         for (Constraint ct : platformConstraints) {
             constraints.put(ct.getName(), ct);
         }
     }
 
-    public EphemeralSession(Delivery delivery) {
+    public EphemeralJob(Delivery delivery) {
     }
 
     @Override

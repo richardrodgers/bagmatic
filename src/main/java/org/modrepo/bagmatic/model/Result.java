@@ -29,4 +29,8 @@ public class Result {
     public void addErrors(List<String> newerrors) {
         errors.addAll(newerrors);
     }
+
+    public void toConsole() {
+        errors.forEach(error -> System.out.println(error));
+    }
 }

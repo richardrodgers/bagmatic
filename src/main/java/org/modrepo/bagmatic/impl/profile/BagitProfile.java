@@ -4,9 +4,11 @@
  */
 package org.modrepo.bagmatic.impl.profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,12 +35,40 @@ public class BagitProfile {
     @JsonProperty("Bag-Info")
     private BagInfo bagInfo;
 
+    @JsonProperty("Manifests-Required")
+    private List<String> manifestsRequired = new ArrayList<>();
+
     @JsonProperty("Manifests-Allowed")
-    private List<String> manifestsAllowed;
+    private List<String> manifestsAllowed = new ArrayList<>(List.of("*"));
+
+    @JsonProperty("Allow-Fetch.txt")
+    private boolean allowFetch = true;
+
+    @JsonProperty("Fetch.txt-Required")
+    private boolean requireFetch = false;
+
+    @JsonProperty("Data-Empty")
+    private boolean dataEmpty = false;
+
+    @JsonProperty("Serialization")
+    private String serialization = "optional";
 
     @JsonProperty("Accept-Serialization")
-    private List<String> acceptSerialization;
+    private List<String> acceptSerialization = new ArrayList<>(List.of("*"));
 
+    @NotEmpty(message = "Must accept at least one version")
     @JsonProperty("Accept-BagIt-Version")
     private List<String> acceptBagitVersion;
+
+    @JsonProperty("Tag-Manifests-Required")
+    private List<String> tagManifestsRequired = new ArrayList<>();
+
+    @JsonProperty("Tag-Manifests-Allowed")
+    private List<String> tagManifestsAllowed = new ArrayList<>(List.of("*"));
+
+    @JsonProperty("Tag-Files-Required")
+    private List<String> tagFilesRequired = new ArrayList<>();
+
+    @JsonProperty("Tag-Files-Allowed")
+    private List<String> tagfilesAllowed = new ArrayList<>(List.of("*"));
 }

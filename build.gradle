@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'maven-publish'
 }
 
 repositories {
@@ -16,20 +17,21 @@ repositories {
 }
 
 dependencies {
-    implementation 'info.picocli:picocli:4.7.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
     //implementation 'org.hibernate.validator:hibernate-validator-cdi:8.0.0.Final'
     implementation 'org.glassfish:jakarta.el:4.0.2'
-    implementation 'org.modrepo:packr:1.0'
+    implementation 'org.modrepo:packr:1.1'
+    //implementation 'org.apache.commons:commons-compress:1.23.0'
 }
 
 group 'org.modrepo'
+archivesBaseName = 'bagmatic'
 version '1.0.0-SNAPSHOT'
 
 ext {
-    developerName1 = "Richard Rodgers"
-    developerId1 = "http://orcid.org/0000-0003-1412-5595"
+    developerName = "Richard Rodgers"
+    developerId = "http://orcid.org/0000-0003-1412-5595"
 }
 
 java {
@@ -46,20 +48,20 @@ compileTestJava {
     options.encoding = 'UTF-8'
 }
 
-mainClassName = 'org.modrepo.bagmatic.Bagmatic'
-
-jar {
-    manifest {
-        attributes('Main-Class': "${mainClassName}")
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/richardrodgers/${archivesBaseName}")
+            credentials {
+                username = project.findProperty("gpr.user") ?: "richardrodgers"
+                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+            }
+        }
     }
-}
-
-task uberJar(type: Jar) {
-    duplicatesStrategy = 'include'
-    manifest {
-        attributes 'Main-Class': "${mainClassName}"
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
     }
-    archiveBaseName = "${rootProject.name}"
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }

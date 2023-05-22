@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Richard Rodgers
+ * Copyright 2023 Richard Rodgers
  * SPDX-Licence-Identifier: Apache-2.0
  */
 package org.modrepo.bagmatic.impl.profile;
@@ -24,7 +24,6 @@ public class BagitTagConstraint implements Constraint {
         this.required = required;
         this.values = values;
         this.repeatable = repeatable;
-        this.values = values;
         this.description = description;
     }
 
@@ -55,8 +54,22 @@ public class BagitTagConstraint implements Constraint {
         return isRefinedBy((BagitTagConstraint)other);
     }
 
+    public BagitTagConstraint merge(Constraint other) {
+
+        var btc = (BagitTagConstraint)other;
+
+        if (this.values.isEmpty() || this.values.containsAll(btc.values)) {
+            this.values.retainAll(btc.values);
+        }
+
+        return this;
+    }
+
     public Result isRefinedBy(BagitTagConstraint tc) {
         Result res = new Result();
+        if (required != tc.required) {
+            res.addError("Required status mismatch");
+        }
         if (! description.equals(tc.description)) {
             res.addError("Constraint name mismatch");
         }
@@ -67,5 +80,11 @@ public class BagitTagConstraint implements Constraint {
             res.addError("Value list incompatible");
         }
         return res;
+    }
+
+    private boolean sameValues(BagitTagConstraint tc) {
+        return this.values.size() == tc.values.size() &&
+                this.values.containsAll(tc.values) &&
+                tc.values.containsAll(this.values);
     }
 }

@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.util.Set;
 
 import org.modrepo.bagmatic.impl.profile.BagitProfile;
-import org.modrepo.bagmatic.model.Constraint;
 import org.modrepo.bagmatic.model.Context;
 import org.modrepo.bagmatic.model.Result;
 
@@ -31,27 +30,30 @@ public class ContextBuilder {
 
     public ContextBuilder() {}
 
-    public Result addProfile(InputStream profIn) throws IllegalStateException, IOException {
+    public Result<ContextBuilder> addProfile(InputStream profIn) throws IllegalStateException, IOException {
         var result = validateProfile(profIn);
         if (result.success()) {
             result = mergeProfiles();
+            if (result.success()) {
+                result.setObject(this);
+            }
         }
         profIn.close();
         return result;
     }
 
-    public Result addTemplate(InputStream templIn) throws IllegalStateException, IOException {
+    public Result<ContextBuilder> addTemplate(InputStream templIn) throws IllegalStateException, IOException {
         // for now, just use profiles - semantics not quite right
         // for all templates, but covers easy cases
         return addProfile(templIn);
     }
 
     public Context build() {
-        return new Context();
+        return new Context(mergedProfile);
     }
 
-    private Result validateProfile(InputStream profIn) {
-        var result = new Result();
+    private Result<ContextBuilder> validateProfile(InputStream profIn) {
+        Result<ContextBuilder> result = new Result<>();
         try  {
             inputProfile = mapper.readValue(profIn, BagitProfile.class);
             Set<ConstraintViolation<BagitProfile>> violations = validator.validate(inputProfile);
@@ -68,7 +70,7 @@ public class ContextBuilder {
         return result;
     }
 
-    private Result mergeProfiles() {
+    private Result<ContextBuilder> mergeProfiles() {
         if (mergedProfile == null) {
             mergedProfile = inputProfile;
             inputProfile = null;
@@ -77,6 +79,6 @@ public class ContextBuilder {
             // skip profileInfo section for now
             
         }
-        return new Result();
+        return new Result<ContextBuilder>();
     }
 }

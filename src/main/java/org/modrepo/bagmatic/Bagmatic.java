@@ -4,10 +4,20 @@
  */
 package org.modrepo.bagmatic;
 
-import org.modrepo.bagmatic.model.Context;
-//import org.modrepo.bagmatic.model.Result;
+import java.io.IOException;
+
+import org.modrepo.bagmatic.model.Result;
 
 public class Bagmatic {
 
     public Bagmatic(){}
+
+    public static ContextBuilder emptyBuilder() {
+        return new ContextBuilder();
+    }
+
+    public static Result<ContextBuilder> platformedBuilder() throws IOException {
+        var builder = new ContextBuilder();
+        return builder.addProfile(ContextBuilder.class.getResourceAsStream("/platform-profile.json"));
+    }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021 Richard Rodgers
+ * Copyright (c) 2023 Richard Rodgers
  * SPDX-Licence-Identifier: Apache-2.0
  */
 package org.modrepo.bagmatic.model;
@@ -7,9 +7,10 @@ package org.modrepo.bagmatic.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Result {
+public class Result<T> {
 
     private final List<String> errors = new ArrayList<>();
+    private T object;
 
     public Result() {
     }
@@ -28,6 +29,14 @@ public class Result {
 
     public void addErrors(List<String> newerrors) {
         errors.addAll(newerrors);
+    }
+
+    public void setObject(T object) {
+        this.object = object;
+    }
+
+    public T getObject() {
+        return object;
     }
 
     public void toConsole() {

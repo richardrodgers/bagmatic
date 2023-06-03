@@ -44,5 +44,5 @@ public class BagitProfileInfo {
 
     @NotBlank( message = "BagIt-Profile-Version required")
     @JsonProperty("BagIt-Profile-Version")
-    private String bagitProfileVersion;
+    private String bagitProfileVersion = "1.1.0";  // default for un-versioned
 }

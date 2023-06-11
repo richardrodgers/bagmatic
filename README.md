@@ -1,6 +1,8 @@
 # Bagmatic - a toolkit and CLI for working with BagIt packages #
 Much bagit content is subject to various rules, patterns, restrictions, boiler-plate, etc imposed by the producer and/or consumer. Bagmatic exposes a structured model to facilitate the coordination of all these factors to automate and regulate - to the degree possible - creation or evaluation of conforming bags. It can be leveraged as a standalone CLI (command-line tool), or used as a library in a GUI or other (Java) application.
 
+[![Build Status](https://github.com/richardrodgers/bagmatic/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/richardrodgers/bagmatic/actions/workflows/gradle.yml)
+
 ## Process Model/Lifecycle ##
 Bagmatic starts with the notion of a _Context_, which is a reusable state of configuration. The context consists of: zero or more _constraint sets_, and zero or more _templates_. A context can be used both in the creation of conforming packages and the validation of received packages. In a producer workflow, often multiple bags are transmitted to a single destination abiding by the same configuration, so bagmatic also provides a _Job_, which is a class containing zero of more source specifications, and at least one _delivery_ specification, indicating a destination address and more. One or more related bags can be are _assembled_ using the job state state, using a container of the same name, and transmitted to a _destination_. Let us examine each component in turn.
 

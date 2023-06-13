@@ -32,6 +32,16 @@ public class BagConstraint implements Constraint {
         return name;
     }
 
+    @Override
+    public boolean isRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean isRepeatable() {
+        return true;
+    }
+
     public Set<String> getValues() {
         return values;
     }

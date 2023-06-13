@@ -37,10 +37,12 @@ public class BagitTagConstraint implements Constraint {
         return description;
     }
 
+    @Override
     public boolean isRequired() {
         return required;
     }
 
+    @Override
     public boolean isRepeatable() {
         return repeatable;
     }
@@ -50,7 +52,7 @@ public class BagitTagConstraint implements Constraint {
     }
 
     @Override
-    public Result compatibleWith(Constraint other) {
+    public Result<String> compatibleWith(Constraint other) {
         return isRefinedBy((BagitTagConstraint)other);
     }
 
@@ -65,8 +67,8 @@ public class BagitTagConstraint implements Constraint {
         return this;
     }
 
-    public Result isRefinedBy(BagitTagConstraint tc) {
-        Result res = new Result();
+    public Result<String> isRefinedBy(BagitTagConstraint tc) {
+        Result<String> res = new Result<>();
         if (required != tc.required) {
             res.addError("Required status mismatch");
         }

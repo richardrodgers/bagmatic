@@ -8,5 +8,7 @@ public interface Constraint {
 
     String getType();
     String getName();
-    Result compatibleWith(Constraint other);
+    boolean isRequired();
+    boolean isRepeatable();
+    Result<String> compatibleWith(Constraint other);
 }

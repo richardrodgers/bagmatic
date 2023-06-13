@@ -30,6 +30,10 @@ public class Context {
     //Result addTemplates(Set<Template> templates);
     //Assembler newAssembler();
 
+    public Map<String, BagitTagConstraint> getTagConstraints() {
+        return mergedProfile.bagInfo;
+    }
+
     public Result<String> conforms(Bag bag) {
         Result<String> result = new Result<>();
         // don't bother checking conformance unless bag is well-formed

@@ -1,5 +1,5 @@
-# Bagmatic - a toolkit and CLI for working with BagIt packages #
-Much bagit content is subject to various rules, patterns, restrictions, boiler-plate, etc imposed by the producer and/or consumer. Bagmatic exposes a structured model to facilitate the coordination of all these factors to automate and regulate - to the degree possible - creation or evaluation of conforming bags. It can be leveraged as a standalone CLI (command-line tool), or used as a library in a GUI or other (Java) application.
+# Bagmatic - a toolkit for working with BagIt packages #
+Much bagIt content is subject to various rules, patterns, restrictions, boiler-plate, etc imposed by the producer and/or consumer. Bagmatic exposes a structured model to facilitate the coordination of all these factors to automate and regulate - to the degree possible - creation or evaluation of conforming bags. It can be leveraged as a library in a CLI, GUI or other (Java) application.
 
 [![Build Status](https://github.com/richardrodgers/bagmatic/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/richardrodgers/bagmatic/actions/workflows/gradle.yml)
 

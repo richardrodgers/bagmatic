@@ -25,24 +25,24 @@ public class BagitProfileInfo {
 
     @NotBlank( message = "BagIt-Profile-Identifier required" )
     @JsonProperty("BagIt-Profile-Identifier")
-    private String bagitProfileIdentifier;
+    public String bagitProfileIdentifier;
 
     @NotBlank( message = "Source-Organization required")
     @JsonProperty("Source-Organization")
-    private String sourceOrganization;
+    public String sourceOrganization;
 
     @JsonProperty("Contact-Name")
-    private String contactName;
+    public String contactName;
 
     @NotBlank( message = "External-Description required")
     @JsonProperty("External-Description")
-    private String externalDescription;
+    public String externalDescription;
 
     @NotBlank( message = "Version required")
     @JsonProperty("Version")
-    private String version;
+    public String version;
 
     @NotBlank( message = "BagIt-Profile-Version required")
     @JsonProperty("BagIt-Profile-Version")
-    private String bagitProfileVersion = "1.1.0";  // default for un-versioned
+    public String bagitProfileVersion = "1.1.0";  // default for un-versioned
 }

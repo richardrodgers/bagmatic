@@ -19,6 +19,10 @@ public class Result<T> {
         return errors.isEmpty();
     }
 
+    public boolean failed() {
+        return getErrors().size() > 0;
+    }
+
     public List<String> getErrors() {
         return errors;
     }

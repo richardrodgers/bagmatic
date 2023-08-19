@@ -1,9 +1,9 @@
 {
-  "BagIt-Profile-Info": {
-    "BagIt-Profile-Identifier":"https://foo.bar/profile1.json",
+  "BagIt-Profile-Info":{
+    "BagIt-Profile-Identifier":"https://org.modrepo.bagmatic/platform-profile.json",
     "Source-Organization":"Modrepo.org",
     "External-Description":"Platform capabilities of Bagmatic Software component",
-    "Version":"0.1-SNAPSHOT",
+    "Version":"0.1",
     "BagIt-Profile-Version":"1.4"
   },
   "Manifests-Allowed":[
@@ -11,6 +11,7 @@
   ],
   "Accept-Serialization":[
     "application/zip",
+    "application/x-tar",
     "application/gzip"
   ],
   "Accept-BagIt-Version":[

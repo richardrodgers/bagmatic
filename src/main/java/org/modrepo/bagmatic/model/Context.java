@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 import org.modrepo.bagmatic.impl.profile.BagitProfile;
 import org.modrepo.bagmatic.impl.profile.BagitTagConstraint;
 
-
-//import java.util.Set;
-
 import org.modrepo.packr.Bag;
 
 public class Context {

@@ -4,20 +4,29 @@
  */
 package org.modrepo.bagmatic;
 
-import java.io.IOException;
-
-import org.modrepo.bagmatic.model.Result;
-
 public class Bagmatic {
 
-    public Bagmatic(){}
+    private static final String platformId = "classpath:/platform-profile.json";
 
+    Bagmatic(){}
+
+    /*
+     * Return a builder with an empty root node
+     */
     public static ContextBuilder emptyBuilder() {
         return new ContextBuilder();
     }
 
-    public static Result<ContextBuilder> platformedBuilder() throws IOException {
+    /*
+     * Return a builder with root node set to the 'platform' profile
+     * Almost always the preferred method, since applications may encounter
+     * unexpected and difficult to rectify errors due to unmanifested constraints
+     * in the supporting libraries using an empty builder. Note also that it is
+     * assumed that the platform profile always validates (it is user-inacessible)
+     */
+    public static ContextBuilder platformBuilder() {
         var builder = new ContextBuilder();
-        return builder.addProfile(ContextBuilder.class.getResourceAsStream("/platform-profile.json"));
+        builder.merge("platform", platformId);
+        return builder;
     }
 }

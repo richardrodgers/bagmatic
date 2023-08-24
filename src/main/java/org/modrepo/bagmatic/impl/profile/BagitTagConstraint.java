@@ -47,8 +47,28 @@ public class BagitTagConstraint implements Constraint {
         return repeatable;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public List<String> getValues() {
         return values;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public void setRepeatable(boolean repeatable) {
+        this.repeatable = repeatable;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

@@ -17,7 +17,7 @@
               "York University"
            ]
         },
-        "Contact-Phone":{
+        "Contact-Email":{
            "required":true
         }
      },

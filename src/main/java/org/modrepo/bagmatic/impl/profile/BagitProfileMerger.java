@@ -5,9 +5,11 @@
 package org.modrepo.bagmatic.impl.profile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.modrepo.bagmatic.model.Result;
 
@@ -40,48 +42,75 @@ public class BagitProfileMerger {
         }
         // now check remaining constraints
 
-        // meld Manifests-Required
-        merged.manifestsRequired = base.manifestsRequired;
-        // meld Manifests-Allowed
-        merged.manifestsAllowed = base.manifestsAllowed;
+        // Manifests-Required
+        merged.manifestsRequired = Stream.concat(base.manifestsRequired.stream(), leaf.manifestsRequired.stream())
+                                         .distinct().toList();
+        // Manifests-Allowed
+        merged.manifestsAllowed = common(base.manifestsAllowed, leaf.manifestsAllowed);
+        // TODO - add test to make sure all required are allowed
 
-        // meld Allow-Fetch.txt
+        // Allow-Fetch.txt
         if (base.allowFetch != leaf.allowFetch) {
             // cannot reconcile - fail with error
             result.addError("Conflicting allow-fetch status");
         } else {
             merged.allowFetch = base.allowFetch;
         }
-        // meld Fetch.txt-Required
-
-        // meld Data-Empty
+        // Fetch.txt-Required
+        if (base.requireFetch != leaf.requireFetch) {
+            // cannot reconcile - fail with error
+            result.addError("Conflicting require Fetch status");
+        } else {
+            merged.requireFetch = base.requireFetch;
+        }
+        // Data-Empty
         if (base.dataEmpty != leaf.dataEmpty) {
             // cannot reconcile - fail with error
             result.addError("Conflicting dataEmpty status");
         } else {
             merged.dataEmpty = base.dataEmpty;
         }
-        // meld Serialization
-        merged.serialization = base.serialization;
-        // meld Accept-Serialization
-        merged.acceptSerialization = base.acceptSerialization;
-        // meld Accept-BagIt-Version
-        merged.acceptBagitVersion = base.acceptBagitVersion;
+        // Serialization
+        if (! base.serialization.equals(leaf.serialization)) {
+            // cannot reconcile - fail with error
+            result.addError("Conflicting serialization status");
+        } else {
+            merged.serialization = base.serialization;
+        }
+        // Accept-Serialization
+        merged.acceptSerialization = common(base.acceptSerialization, leaf.acceptSerialization);
+        if (merged.serialization.equals("required") || merged.serialization.equals("optional")) {
+            if (merged.acceptSerialization.size() < 1) {
+                result.addError("At least one serialization format must be accepted");
+            }
+        }
+        // Accept-BagIt-Version
+        merged.acceptBagitVersion = common(base.acceptBagitVersion, leaf.acceptBagitVersion);
+        if (merged.acceptBagitVersion.size() < 1) {
+            result.addError("At least one BagIt versison must be accepted");
+        }
+        // Tag-Manifests-Required
+        merged.tagManifestsRequired = Stream.concat(base.tagManifestsRequired.stream(), leaf.tagManifestsRequired.stream())
+                                      .distinct().toList();
+        // Tag-Manifests-Allowed
+        merged.tagManifestsAllowed = common(base.tagManifestsAllowed, leaf.tagManifestsAllowed);
 
-        // meld Tag-Manifests-Required
-        merged.tagFilesRequired = base.tagFilesRequired;
-        // meld Tag-Manifests-Allowed
-        merged.tagManifestsAllowed = base.tagManifestsAllowed;
-
-        // meld Tag-Files-Required
-        merged.tagFilesRequired = base.tagFilesRequired;//
+        // Tag-Files-Required
+        merged.tagFilesRequired = Stream.concat(base.tagFilesRequired.stream(), leaf.tagFilesRequired.stream())
+                                      .distinct().toList();
         // meld Tag-Files-Allowed
-        merged.tagfilesAllowed = base.tagfilesAllowed;
+        merged.tagfilesAllowed = common(base.tagfilesAllowed, leaf.tagfilesAllowed);
 
         if (result.success()) {
             result.setObject(merged);
         }
         return result;
+    }
+
+    private static List<String> common(List<String> list1, List<String> list2) {
+        return Stream.concat(list1.stream(), list2.stream())
+                     .filter(m -> list1.contains(m) && list2.contains(m))
+                     .distinct().toList();
     }
 
     private static Map<String, BagitTagConstraint> disjunctiveUnion(Map<String, BagitTagConstraint> map1,

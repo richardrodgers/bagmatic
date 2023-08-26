@@ -24,6 +24,7 @@ import jakarta.validation.Validator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.modrepo.bagmatic.impl.profile.BagitProfile;
+import org.modrepo.bagmatic.impl.profile.BagitProfileMerger;
 import org.modrepo.bagmatic.model.Context;
 import org.modrepo.bagmatic.model.Result;
 import org.modrepo.bagmatic.model.ntree.Node;
@@ -60,11 +61,13 @@ public class ContextBuilder {
                 profileTree.setRoot(new Node<Profile>(new Profile(localName, profileId, result.getObject())));
                 tipNode = profileTree.getRoot();
             } else { // try to merge with tip node
-                var mergeResult = mergeProfile(result.getObject());
+                var mergeResult = BagitProfileMerger.mergeProfiles(tipNode.getData().profile(), result.getObject());
                 if (mergeResult.success()) {
                     var node = new Node<Profile>(new Profile(localName, profileId, mergeResult.getObject()));
                     tipNode.addChild(node);
                     tipNode = node;
+                } else {
+                    result.addError(mergeResult.getErrors().get(0));
                 }
             }
         }
@@ -95,8 +98,7 @@ public class ContextBuilder {
                                          .findFirst();
         if (match.isPresent()) {
             tipNode = match.get();
-            return Optional.of(tipNode.getData().profile);
-            //return Optional.ofNullable(tipNode.getData().profile);
+            return Optional.of(tipNode.getData().profile());
         }
         return Optional.empty();
     }
@@ -161,13 +163,6 @@ public class ContextBuilder {
                 }
             }
         }
-        return result;
-    }
-
-    private Result<BagitProfile> mergeProfile(BagitProfile prof) {
-        // element-wise comparison/merge - TODO
-        var result = new Result<BagitProfile>();
-        result.setObject(prof);
         return result;
     }
 }

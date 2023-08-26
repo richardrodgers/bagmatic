@@ -24,8 +24,8 @@
      "Manifests-Required":[
         "md5"
      ],
-     "Allow-Fetch.txt":false,
-     "Serialization":"required",
+     "Allow-Fetch.txt":true,
+     "Serialization":"optional",
      "Accept-Serialization":[
         "application/zip",
         "application/x-tar"

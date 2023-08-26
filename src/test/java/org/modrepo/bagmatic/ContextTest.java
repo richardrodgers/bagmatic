@@ -6,19 +6,11 @@ package org.modrepo.bagmatic;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-import java.io.IOException;
 
 import org.modrepo.bagmatic.impl.profile.BagitProfile;
 import static org.modrepo.bagmatic.Bagmatic.*;
-import org.modrepo.bagmatic.model.Context;
 import org.modrepo.bagmatic.model.Result;
-import org.modrepo.packr.Bag;
-import org.modrepo.packr.Serde;
 
 /*
  * Tests for context formation
@@ -58,11 +50,15 @@ public class ContextTest {
     @Test
     public void createSiblingOnPlatform() {
         var builder = platformBuilder();
-        builder.merge("testProf", testProf);
-        builder.parent();
+        var result2 = builder.merge("testProf", testProf);
+        assertTrue(result2.success());
+        var parent = builder.parent();
+        assertTrue(parent.isPresent());
         var result = builder.merge("testProfBar", testProfBar);
         assertTrue(result.success());
         assertTrue(result.getObject().bagInfo.containsKey("Contact-Email"));
+        var parent2 = builder.parent();
+        assertTrue(parent2.isPresent());
     }
 
     @Test
@@ -70,7 +66,7 @@ public class ContextTest {
         var builder = platformBuilder();
         var result1 = builder.merge("testProf", testProf);
         assertTrue(result1.success());
-        assertTrue(result1.getObject().bagInfo.containsKey("Bagging-Date"));
+        assertTrue(result1.getObject().bagInfo.containsKey("Contact-Phone"));
         var opt1 = builder.parent();
         assertTrue(opt1.get().bagitProfileInfo.version.equals("0.1"));
         var result2 = builder.merge("testProfBar", testProfBar);

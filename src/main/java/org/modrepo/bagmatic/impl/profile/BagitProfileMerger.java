@@ -40,6 +40,7 @@ public class BagitProfileMerger {
                 break;
             }
         }
+        merged.bagInfo = infoSpecs;
         // now check remaining constraints
 
         // Manifests-Required
@@ -122,7 +123,7 @@ public class BagitProfileMerger {
                      .forEach(union::remove);
         var right = map2.keySet().stream()
                                  .filter(key -> ! union.containsKey(key))
-                                 .collect(Collectors.toMap(Function.identity(), map1::get));
+                                 .collect(Collectors.toMap(Function.identity(), map2::get));
         union.putAll(right);
         return union;
     }
